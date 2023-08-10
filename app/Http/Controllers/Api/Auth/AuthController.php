@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends BaseController
 {
+    private $userData = ['id', 'name', 'email', 'deleted_at'];
+
     /**
      * Handle an authentication attempt.
      */
@@ -22,8 +24,11 @@ class AuthController extends BaseController
         ]);
 
         if (Auth::attempt($credentials)) {
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request->email)->first($this->userData);
+            $user->active = is_null($user->deleted_at);
             $user->token = $user->createToken('auth_token')->plainTextToken;
+
+            unset($user->deleted_at);
 
             $message = 'Login bem-sucedido!';
             return $this->handleResponse($user, $message);
