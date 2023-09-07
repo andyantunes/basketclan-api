@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends BaseController
 {
-    private $userData = ['id', 'name', 'email', 'deleted_at'];
+    private $userData = ['id', 'name', 'email', 'type_user', 'deleted_at'];
 
     /**
      * Handle an authentication attempt.
@@ -30,11 +30,11 @@ class AuthController extends BaseController
 
             unset($user->deleted_at);
 
-            $message = 'Login bem-sucedido!';
+            $message = "Bem vindo {$user->name}!";
             return $this->handleResponse($user, $message);
         }
 
-        $message = 'As credenciais fornecidas não correspondem aos nossos registros';
+        $message = 'Credenciais inválidas!';
         return $this->handleError($message, ['error' => 'Credenciais inválidas.'], 401);
     }
 
@@ -45,7 +45,7 @@ class AuthController extends BaseController
      */
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+        // auth()->user()->tokens()->delete();
 
         $message = 'Logout bem-sucedido!';
         return $this->handleResponse([], $message);
