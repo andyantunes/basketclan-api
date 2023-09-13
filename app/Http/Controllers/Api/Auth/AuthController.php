@@ -23,6 +23,11 @@ class AuthController extends BaseController
             'password' => ['required'],
         ]);
 
+        //  TODO Token Expiration
+        /**
+         * Utilizar a expiração do Token, exemplo utilizando o condigo no Laravel:
+         * https://chat.openai.com/share/c921be7b-2204-4a01-9bb7-d1da1163a182
+         */
         if (Auth::attempt($credentials)) {
             $user = User::where('email', $request->email)->first($this->userData);
             $user->active = is_null($user->deleted_at);
